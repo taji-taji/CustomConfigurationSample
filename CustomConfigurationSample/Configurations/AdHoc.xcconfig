@@ -1,0 +1,15 @@
+//
+//  AdHoc.xcconfig
+//  CustomConfigurationSample
+//
+//  Created by Yutaka Tajika on 2022/11/29.
+//
+
+// Configuration settings file format documentation can be found at:
+// https://help.apple.com/xcode/#/dev745c5c974
+
+#include "Base.xcconfig"
+
+PRODUCT_BUNDLE_IDENTIFIER = $(BASE_PRODUCT_BUNDLE_IDENTIFIER).ad-hoc
+PRODUCT_NAME = [Ad-Hoc] $(BASE_PRODUCT_NAME)
+SWIFT_ACTIVE_COMPILATION_CONDITIONS = AD_HOC
