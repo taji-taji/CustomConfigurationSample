@@ -4,7 +4,10 @@
 import PackageDescription
 
 let configuration: Configuration = {
-    guard let environmentVariable = Context.environment["BUILD_CONFIGURATION"] else {
+    let buildConfigFilePath = Context.packageDirectory + "/../.buildConfig"
+    let buildConfig = try? String(contentsOfFile: buildConfigFilePath, encoding: .utf8).trimmingCharacters(in: .whitespacesAndNewlines)
+    
+    guard let environmentVariable = Context.environment["BUILD_CONFIGURATION"] ?? buildConfig else {
         fatalError("BUILD_CONFIGURATION is required.")
     }
     guard let configuration = Configuration(rawValue: environmentVariable) else {

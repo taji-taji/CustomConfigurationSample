@@ -17,7 +17,14 @@ Custom Build Configuration を利用しているプロジェクトを debug と 
 #### マクロの定義
 
 - package manifest にて各ターゲットに `SwiftSetting.define(_:_:)` を用いることでマクロの定義ができる
-- Package.swift 内で Custom Build Configuraion に相当する環境変数を読み取り、その値によってターゲットに定義する `SwiftSetting.define(_:_:)` の値を変える
+- Package.swift 内で Custom Build Configuration に相当する環境変数を読み取り、その値によってターゲットに定義する `SwiftSetting.define(_:_:)` の値を変える
+  - Xcode アプリで Package.swift の環境変数を読み込ませるのが面倒
+    - 一度 Xcode アプリを閉じた上で次のようにして開く必要がある
+      ```sh
+      BUILD_CONFIGURATION=AD_HOC open CustomConfigurationSample.xcodeproj
+      ```
+    - Xcode アプリでは基本的に Debug しか使わず、 Custom Build Configuration 相当は CI 環境でしか使わないという運用であればここは許容できるかも
+  - これを防ぐために、ローカルに Configuration を表すファイルを置いて、それを都度読み込ませる形にしてみた
 
 ### Xcode プロジェクトの Build Settings について
 
@@ -34,11 +41,12 @@ BUILD_CONFIGURATION=AD_HOC \ # ← Package.swift で読み込ませるために�
   -destination 'platform=iOS Simulator,name=iPhone 14,OS=16.1'
 ```
 
-## 懸念点
+## サンプルプロジェクトのビルド方法
 
-- Xcode アプリで Package.swift の環境変数を読み込ませるのが面倒
-    - 一度 Xcode アプリを閉じた上で次のようにして開く必要がある
+下記のいずれかを行わないと Package.swift にてエラーが発生します。
+
+- 方法1. プロジェクトルートに .buildConfig ファイルを作成し、ファイルの内容として `DEBUG`, `AD_HOC`, `RELEASE` のいずれかを記載します
+- 方法2. Xcode を完全に閉じて、次のようにしてプロジェクトを開きます
     ```sh
     BUILD_CONFIGURATION=AD_HOC open CustomConfigurationSample.xcodeproj
     ```
-    - Xcode アプリでは基本的に Debug しか使わず、 Custom Build Configuration 相当は CI 環境でしか使わないという運用であればここは許容できるかも
