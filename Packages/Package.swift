@@ -3,6 +3,18 @@
 
 import PackageDescription
 
+// MARK: - Build Configuration
+
+enum Configuration: String {
+    case debug = "DEBUG"
+    case release = "RELEASE"
+    case adhoc = "AD_HOC"
+    
+    var swiftSetting: SwiftSetting {
+        .define(self.rawValue)
+    }
+}
+
 let configuration: Configuration = {
     let buildConfigFilePath = Context.packageDirectory + "/../.buildConfig"
     let buildConfig = try? String(contentsOfFile: buildConfigFilePath, encoding: .utf8).trimmingCharacters(in: .whitespacesAndNewlines)
@@ -15,6 +27,8 @@ let configuration: Configuration = {
     }
     return configuration
 }()
+
+// MARK: - Package manifest
 
 let package = Package(
     name: "Packages",
@@ -37,13 +51,3 @@ let package = Package(
             ]),
     ]
 )
-
-enum Configuration: String {
-    case debug = "DEBUG"
-    case release = "RELEASE"
-    case adhoc = "AD_HOC"
-    
-    var swiftSetting: SwiftSetting {
-        .define(self.rawValue)
-    }
-}
